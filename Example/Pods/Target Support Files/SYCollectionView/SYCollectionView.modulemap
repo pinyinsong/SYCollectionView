@@ -1,0 +1,6 @@
+framework module SYCollectionView {
+  umbrella header "SYCollectionView-umbrella.h"
+
+  export *
+  module * { export * }
+}

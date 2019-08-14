@@ -1,0 +1,16 @@
+PODS:
+  - SYCollectionView (0.1.0)
+
+DEPENDENCIES:
+  - SYCollectionView (from `../`)
+
+EXTERNAL SOURCES:
+  SYCollectionView:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SYCollectionView: aeaabc4a4e5975797fbe8cff032f06c132e8b3c5
+
+PODFILE CHECKSUM: ed157f714e30b39f98c59ddd6b1f4583c4064a49
+
+COCOAPODS: 1.7.5
