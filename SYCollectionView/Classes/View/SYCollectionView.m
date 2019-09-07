@@ -9,7 +9,7 @@
 #import "SYCollectionView.h"
 #import "UIButton+SYCollectionView.h"
 
-@interface SYCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource, CellHasCollectionViewDelegate>
+@interface SYCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) NSArray *allkeys;
 @end
 
@@ -71,9 +71,8 @@
         NSString *cellClassStr = [cellModel cellIdentifier];
         [self registerClass:[NSClassFromString(cellClassStr) class] forCellWithReuseIdentifier:cellClassStr];
         id<SYCollectionViewCellProtocol> cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellClassStr forIndexPath:indexPath];
-        cell.cellHasCollectionViewDelegate = self;
-        if ([cell respondsToSelector:@selector(bindCellModel:withIndexPath:)]) {
-            [cell bindCellModel:cellModel withIndexPath:indexPath];
+        if ([cell respondsToSelector:@selector(bindCellModelCollectionView:cellModel:withIndexPath:)]) {
+            [cell bindCellModelCollectionView:self cellModel:cellModel withIndexPath:indexPath];
         }
         if ([cell respondsToSelector:@selector(cellControls)]) {
             [cell.cellControls enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -88,6 +87,7 @@
                 }
             }];
         }
+        
         return (UICollectionViewCell *)cell;
     }
     return [[UICollectionViewCell alloc] initWithFrame:CGRectZero];
@@ -99,9 +99,10 @@
         NSArray *array = self.data;
         id<SYCollectionViewCellRenderProtocol> cellModel = array[indexPath.row];
         Class<SYCollectionViewCellProtocol> cellClass = NSClassFromString([cellModel cellIdentifier]);
-        if ([(NSObject *)cellClass respondsToSelector:@selector(sizeForCellModel:constrainedToSize:)]) {
-            return [cellClass sizeForCellModel:cellModel
-                             constrainedToSize:collectionView.frame.size atIndexPath:indexPath];
+        if ([(NSObject *)cellClass respondsToSelector:@selector(sizeForCollectionView:cellModel:constrainedToSize:atIndexPath:)]) {
+            return [cellClass sizeForCollectionView:collectionView
+                                          cellModel:cellModel
+                                  constrainedToSize:collectionView.frame.size atIndexPath:indexPath];
         }
         return CGSizeZero;
     } else {
@@ -109,9 +110,10 @@
         NSString *key = [self.allkeys objectAtIndex:indexPath.section];
         id<SYCollectionViewCellRenderProtocol> cellModel = [dictionary objectForKey:key][indexPath.row];
         Class<SYCollectionViewCellProtocol> cellClass = NSClassFromString([cellModel cellIdentifier]);
-        if ([(NSObject *)cellClass respondsToSelector:@selector(sizeForCellModel:constrainedToSize:)]) {
-            return [cellClass sizeForCellModel:cellModel
-                             constrainedToSize:collectionView.frame.size atIndexPath:indexPath];
+        if ([(NSObject *)cellClass respondsToSelector:@selector(sizeForCollectionView:cellModel:constrainedToSize:atIndexPath:)]) {
+            return [cellClass sizeForCollectionView:collectionView
+                                          cellModel:cellModel
+                                  constrainedToSize:collectionView.frame.size atIndexPath:indexPath];
         }
         return CGSizeZero;
     }
@@ -280,3 +282,4 @@
     return nil;
 }
 @end
+
