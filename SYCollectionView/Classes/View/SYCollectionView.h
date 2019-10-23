@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UICollectionReusableView *)sy_collectionView:(UICollectionView *)collectionView headerViewatIndexPath:(NSIndexPath *)indexPath;
 - (UICollectionReusableView *)sy_collectionView:(UICollectionView *)collectionView footerViewatIndexPath:(NSIndexPath *)indexPath;
+- (CGSize)sy_collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
+- (CGSize)sy_collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
 @end
 
 @protocol SYCollectionViewEditDelegate <NSObject>
@@ -74,4 +76,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

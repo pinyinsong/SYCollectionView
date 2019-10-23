@@ -9,7 +9,7 @@
 #import "SYCollectionView.h"
 #import "UIButton+SYCollectionView.h"
 
-@interface SYCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface SYCollectionView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong) NSArray *allkeys;
 @end
 
@@ -78,7 +78,10 @@
             [cell.cellControls enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([obj isKindOfClass:[UIButton class]]) {
                     if ([self.controlDelegate respondsToSelector:@selector(sy_inCollectionViewButtonEvent:model:indexPath:)]) {
-                        [self.controlDelegate sy_inCollectionViewButtonEvent:(UIButton *)obj model:cellModel.enity indexPath:indexPath];
+                        UIButton *button = (UIButton *)obj;
+                        [button clickButtonWithEvent:UIControlEventTouchUpInside action:^(UIButton * _Nonnull sender) {
+                            [self.controlDelegate sy_inCollectionViewButtonEvent:(UIButton *)obj model:cellModel.enity indexPath:indexPath];
+                        }];
                     }
                 } else {
                     if ([self.controlDelegate respondsToSelector:@selector(sy_inCollectionView:hasKindOfControl:model:atIndexPath:)]) {
@@ -117,6 +120,20 @@
         }
         return CGSizeZero;
     }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    if ([self.syDelegate respondsToSelector:@selector(sy_collectionView:layout:referenceSizeForHeaderInSection:)]) {
+        return [self.syDelegate sy_collectionView:collectionView layout:collectionViewLayout referenceSizeForHeaderInSection:section];
+    }
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    if ([self.syDelegate respondsToSelector:@selector(sy_collectionView:layout:referenceSizeForFooterInSection:)]) {
+        return [self.syDelegate sy_collectionView:collectionView layout:collectionViewLayout referenceSizeForFooterInSection:section];
+    }
+    return CGSizeZero;
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -282,4 +299,3 @@
     return nil;
 }
 @end
-
