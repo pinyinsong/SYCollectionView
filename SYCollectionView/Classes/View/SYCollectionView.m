@@ -234,7 +234,7 @@
     if ([self.scrollDelegate respondsToSelector:@selector(sy_scrollViewShouldScrollToTop:)]) {
         return [self.scrollDelegate sy_scrollViewShouldScrollToTop:scrollView];
     }
-    return NO;
+    return YES;
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
@@ -299,3 +299,4 @@
     return nil;
 }
 @end
+
